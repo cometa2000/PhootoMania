@@ -68,12 +68,6 @@ Perfil de {{ $user->username }}
                     @endif
                 @endif  
             @endauth
-            @auth
-                @if ($user->id == auth()->user()->id)
-                    <input type="button" class="bg-lime-600 hover:bg-lime-800 text-white uppercase rounded-lg px-3 py-1 text-xs font-bold cursor-pointer mt-3" value="Grafica" id="showChartButton">
-                    <canvas id="myChart" style="display: none;"></canvas>
-                @endif  
-            @endauth
         </div>
     </div>
 </div>
@@ -83,52 +77,6 @@ Perfil de {{ $user->username }}
     <x-listar-post :posts="$posts" />
 </section>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const showChartButton = document.getElementById('showChartButton');
-        const myChartCanvas = document.getElementById('myChart');
-        
-        let data = {
-            labels: ['Seguidores', 'Siguiendo', 'Posts', 'Comentarios', 'Likes'],
-            datasets: [{
-                data: [{{ $user->followers->count() }}, {{ $user->followings->count() }}, {{ $user->posts->count() }}, {{ $user->commentsCount() }}, {{ $user->likesCount() }}],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',  // Color para Seguidores
-                    'rgba(54, 162, 235, 0.2)',  // Color para Siguiendo
-                    'rgba(255, 206, 86, 0.2)',  // Color para Posts
-                    'rgba(75, 192, 192, 0.2)',  // Color para Comentarios
-                    'rgba(153, 102, 255, 0.2)', // Color para Likes
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                ],
-                borderWidth: 1,
-            }],
-        };
-    
-        const myChart = new Chart(myChartCanvas.getContext('2d'), {
-            type: 'pie',
-            data: data,
-        });
-    
-        let chartVisible = false;
-    
-        showChartButton.addEventListener('click', function () {
-            if (chartVisible) {
-                myChartCanvas.style.display = 'none';
-            } else {
-                myChart.update();
-                myChartCanvas.style.display = 'block';
-            }
-    
-            chartVisible = !chartVisible;
-        });
-    });
-</script>
     
 
 @endsection
